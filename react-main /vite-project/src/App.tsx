@@ -1,46 +1,40 @@
-import { useState } from 'react'
-import './App.css'
+import { useState } from 'react';
 
-let nextId = 0;
+export default function SyncedInputs() {
+    const [text, setText] = useState('');
 
-type Artist = {
-  id: number
-  name: string
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', padding: '20px' }}>
+      <Input 
+        label="First input" 
+        text={text} 
+        onChange={(e) => setText(e.target.value)} 
+      />
+      <Input 
+        label="Second input" 
+        text={text} 
+        onChange={(e) => setText(e.target.value)} 
+      />
+    </div>
+  );
 }
 
-export default function App() {
-  const [name, setName] = useState('')
-  const [artists, setArtists] = useState<Artist[]>([])
+// ĐÂY LÀ ĐOẠN CODE ĐÃ SỬA (Component Con nhận Props từ Cha)
+type InputProps = {
+  label: string;
+  text: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
-  const handleRemoveArtist = (artistId: number) => {
-    const newArtists = artists.filter((artist) => artist.id !== artistId)
-    setArtists(newArtists)
-  }
-
-  console.log(artists)
+function Input({ label, text, onChange }: InputProps) {
   return (
-    <>
-      <h1>Inspiring sculptors:</h1>
-      <input value={name} onChange={(e) => setName(e.target.value)} />
-      <button
-        onClick={() => {
-          const newArtists = [ ...artists, { id: nextId++, name }]
-          setArtists(newArtists)
-          setName('')
-        }}
-      >
-        Add
-      </button>
-      <ul>
-        {artists.map((artist) => (
-          <li key={artist.id}>
-            {artist.name}{' '}
-            <button onClick={() => handleRemoveArtist(artist.id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
-    </>
-  )
+    <label style={{ display: 'flex', flexDirection: 'column', fontWeight: 'bold' }}>
+      {label}
+      <input
+        value={text}
+        onChange={onChange}
+        style={{ padding: '8px', marginTop: '5px', borderRadius: '4px', border: '1px solid #888' }}
+      />
+    </label>
+  );
 }
