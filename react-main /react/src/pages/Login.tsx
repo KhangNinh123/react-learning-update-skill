@@ -1,24 +1,26 @@
 import { Button, Card } from '@heroui/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import http from '../lib/http'
+import { authApi } from '../api/auth'
+import { useAuth } from '../contexts/AuthContext'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const Navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const { data } = await http.post('/auth/login', { username, password })
+      const data = await authApi.login(username, password)
       console.log('Login response:', data)
 
       const accessToken = data.accessToken || data.access_token
       const refreshToken = data.refreshToken || data.refresh_token
 
-      localStorage.setItem('accessToken', accessToken)
-      localStorage.setItem('refreshToken', refreshToken)
+      // Gọi hàm login từ AuthContext để lưu token và user data
+      login(accessToken, refreshToken, data.user)
 
       Navigate('/products')
     } catch (error) {

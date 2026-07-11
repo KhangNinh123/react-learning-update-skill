@@ -1,0 +1,21 @@
+import http from '../lib/http'
+
+export const authApi = {
+  login: async (username: string, password: string) => {
+    const { data } = await http.post('/auth/login', {
+      username,
+      password,
+    })
+    return data
+  },
+  logout: async (refreshToken: string) => {
+    const { data } = await http.post('/auth/logout', {
+      refreshToken,
+    })
+    return data
+  },
+  me: async () => {
+    const { data } = await http.get('/auth/me')
+    return data
+  },
+}

@@ -4,40 +4,42 @@ import Login from './pages/Login'
 import ProductsPage from './pages/Products/ProductsPage'
 import ProductDetailPage from './pages/Products/ProductDetailPage'
 import GuestRoute from './components/GuestRoute'
+
 import ProtectedRoute from './components/ProtectedRoute'
 
 const routes = createBrowserRouter([
+  {
+    path: '/',
+    element: <Navigate to='/products' replace />
+  },
   {
     Component: GuestRoute,
     children: [
       {
         path: '/login',
-        Component: Login,
-      },
-    ],
+        Component: Login
+      }
+    ]
   },
   {
     Component: ProtectedRoute,
     children: [
       {
         Component: Layout,
+        path: '/products',
         children: [
           {
-            path: '/',
-            element: <Navigate to="/products" replace />,
-          },
-          {
-            path: '/products',
-            Component: ProductsPage,
+            index: true,
+            Component: ProductsPage
           },
           {
             path: '/products/:id',
-            Component: ProductDetailPage,
-          },
-        ],
-      },
-    ],
-  },
+            Component: ProductDetailPage
+          }
+        ]
+      }
+    ]
+  }
 ])
 
 export default routes
